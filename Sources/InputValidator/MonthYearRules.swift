@@ -43,9 +43,9 @@ public extension AnyInputRule where Value == String {
         }
     }
 
-    static func monthYear(compare: @escaping (DateComponents?) throws -> DateComponents?) -> Self {
+    static func monthYear(validate: @escaping (DateComponents?) throws -> DateComponents?) -> Self {
         .init {
-            try compare($0.monthYear)?.mmyy ?? ""
+            try validate($0.monthYear)?.mmyy ?? ""
         }
     }
 }
@@ -55,7 +55,7 @@ private extension DateComponents {
     var mmyy: String {
         if let month {
             if let year {
-                "\(month)/\(year)"
+                "\(month)/\(String(year).suffix(2))"
             } else {
                 "\(month)"
             }

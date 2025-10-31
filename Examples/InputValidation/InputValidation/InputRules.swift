@@ -22,30 +22,30 @@ extension InputRule where Self == AnyInputRule<String> {
             .minimumLength(8, error: ValidationError.password),
             AnyInputRule {
                 if $0.contains(/[A-Z]/) {
-                    .success($0)
+                    $0
                 } else {
-                    .failure(ValidationError.password)
+                    throw ValidationError.password
                 }
             },
             AnyInputRule {
                 if $0.contains(/[a-z]/) {
-                    .success($0)
+                    $0
                 } else {
-                    .failure(ValidationError.password)
+                    throw ValidationError.password
                 }
             },
             AnyInputRule {
                 if $0.contains(/\d/) {
-                    .success($0)
+                    $0
                 } else {
-                    .failure(ValidationError.password)
+                    throw ValidationError.password
                 }
             },
             AnyInputRule {
                 if $0.contains(/[^a-zA-Z\d]/) {
-                    .success($0)
+                    $0
                 } else {
-                    .failure(ValidationError.password)
+                    throw ValidationError.password
                 }
             }
         ])
@@ -59,8 +59,18 @@ extension InputRule where Self == AnyInputRule<String> {
         .and([
             AnyInputRule.monthYear(),
             AnyInputRule.monthYear {
-                guard let date = $0 else {
-                    return .failure(ValidationError.invalidDate)
+                if let dateComponents = $0,
+                   dateComponents.month != nil && dateComponents.year != nil,
+                   let calendar = dateComponents.calendar,
+                   let date = calendar.date(from: dateComponents),
+                   let expires = calendar.date(byAdding: .init(calendar: calendar, month: 1), to: date) {
+                    if expires.compare(.now) == .orderedDescending {
+                        $0
+                    } else {
+                        throw ValidationError.expired
+                    }
+                } else {
+                    throw ValidationError.invalidDate
                 }
             }
         ])
@@ -73,6 +83,7 @@ enum ValidationError: LocalizedError {
     case password
     case confirmPassword
     case invalidDate
+    case expired
 
     var errorDescription: String? {
         switch self {
@@ -86,6 +97,8 @@ enum ValidationError: LocalizedError {
             String(localized: .confirmPasswordError)
         case .invalidDate:
             String(localized: .expirationDateRequired)
+        case .expired:
+            String(localized: .expired)
         }
     }
 }
