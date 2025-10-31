@@ -10,18 +10,18 @@ import Foundation
 public protocol InputRule<Value> {
     associatedtype Value
 
-    func callAsFunction(_ value: Value) -> Result<Value, Error>
+    func callAsFunction(_ value: Value) throws -> Value
 }
 
 public struct AnyInputRule<Value>: InputRule {
-    let validate: (Value) -> Result<Value, Error>
+    let validate: (Value) throws -> Value
 
-    public init(_ validate: @escaping (Value) -> Result<Value, Error>) {
+    public init(_ validate: @escaping (Value) throws -> Value) {
         self.validate = validate
     }
 
-    public func callAsFunction(_ value: Value) -> Result<Value, Error> {
-        validate(value)
+    public func callAsFunction(_ value: Value) throws -> Value {
+        try validate(value)
     }
 }
 
@@ -29,7 +29,7 @@ public extension InputRule {
 
     func any() -> AnyInputRule<Value> {
         .init {
-            callAsFunction($0)
+            try self($0)
         }
     }
 }

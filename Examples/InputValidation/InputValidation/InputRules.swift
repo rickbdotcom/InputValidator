@@ -57,8 +57,12 @@ extension InputRule where Self == AnyInputRule<String> {
 
     static var expirationDate: AnyInputRule<String> {
         .and([
-            //MonthYearRewriteRule(),
-            //MonthYearRule {
+            AnyInputRule.monthYear(),
+            AnyInputRule.monthYear {
+                guard let date = $0 else {
+                    return .failure(ValidationError.invalidDate)
+                }
+            }
         ])
     }
 }

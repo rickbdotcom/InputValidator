@@ -9,7 +9,7 @@ import Foundation
 
 public extension AnyInputRule where Value == String {
 
-    static func monthYear(_ value: Value) -> Self {
+    static func monthYear() -> Self {
         .init { initialValue in
             let digits = Array(initialValue).compactMap {
                 Int(String($0))
@@ -39,18 +39,13 @@ public extension AnyInputRule where Value == String {
                     break
                 }
             }
-            return .success(mmyy)
+            return mmyy
         }
     }
 
-    static func monthYear(_ value: Value, error: Error, compare: @escaping (DateComponents?) -> Result<DateComponents?, Error>) -> Self {
+    static func monthYear(compare: @escaping (DateComponents?) throws -> DateComponents?) -> Self {
         .init {
-            switch compare($0.monthYear) {
-            case let .success(date):
-                .success(date?.mmyy ?? "")
-            case let .failure(error):
-                .failure(error)
-            }
+            try compare($0.monthYear)?.mmyy ?? ""
         }
     }
 }

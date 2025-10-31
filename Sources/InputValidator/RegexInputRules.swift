@@ -11,14 +11,10 @@ public extension AnyInputRule where Value == String {
 
     static func wholeMatch(_ regex: Regex<String>, error: Error) -> Self {
         .init { value in
-            do {
-                if try regex.wholeMatch(in: value) != nil {
-                    return .success(value)
-                } else {
-                    return .failure(error)
-                }
-            } catch {
-                return .failure(error)
+            if try regex.wholeMatch(in: value) != nil {
+                return value
+            } else {
+                throw error
             }
         }
     }

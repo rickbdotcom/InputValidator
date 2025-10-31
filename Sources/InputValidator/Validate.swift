@@ -65,11 +65,10 @@ import SwiftUI
     }
 
     func validate(_ newValue: Rule.Value) {
-        switch rule(newValue) {
-        case let .success(value):
-            boxedValue.value = value
+        do {
+            boxedValue.value = try rule(newValue)
             boxedValue.error = nil
-        case let .failure(error):
+        } catch {
             boxedValue.value = newValue
             boxedValue.error = error
         }

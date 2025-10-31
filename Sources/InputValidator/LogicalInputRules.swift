@@ -13,35 +13,31 @@ public extension AnyInputRule {
         .init { initialValue in
             var value = initialValue
             for rule in rules {
-                if case let .failure(error) = rule(value) {
-                    return .failure(error)
-                } else if case let .success(newValue) = rule(value) {
-                    value = newValue
-                }
+                value = try rule(value)
             }
-            return .success(value)
+            return value
         }
     }
 
     static func or(_ rules: [any InputRule<Value>]) -> Self {
         .init { initialValue in
             var value = initialValue
-            var error: Error?
+            var anyError: Error?
             var success = false
             for rule in rules {
-                if case let .failure(newError) = rule(value) {
-                    error = newError
-                } else if case let .success(newValue) = rule(value) {
+                do {
+                    value = try rule(value)
                     success = true
-                    value = newValue
+                } catch {
+                    anyError = error
                 }
             }
             if success {
-                return .success(value)
-            } else if let error {
-                return .failure(error)
+               return value
+            } else if let anyError {
+                throw anyError
             } else {
-                return .success(value)
+                return value
             }
         }
     }
@@ -55,12 +51,12 @@ public extension AnyInputRule {
     }
 
     func not(error: Error) -> Self {
-        .init { value in
-            switch self(value) {
-            case .success:
-                .failure(error)
-            case .failure:
-                .success(value)
+        .init {
+            let newValue = try? self($0)
+            if newValue == nil {
+                return $0
+            } else {
+                throw error
             }
         }
     }
