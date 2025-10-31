@@ -24,3 +24,12 @@ public struct AnyInputRule<Value>: InputRule {
         validate(value)
     }
 }
+
+public extension InputRule {
+
+    func any() -> AnyInputRule<Value> {
+        .init {
+            callAsFunction($0)
+        }
+    }
+}

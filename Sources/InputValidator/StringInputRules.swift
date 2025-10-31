@@ -15,18 +15,17 @@ public extension AnyInputRule where Value == String {
         }
     }
 
-    static func maximumLength(_ length: Int, error: Error) -> Self {
+    static func maximumLength(_ length: Int, error: Error? = nil) -> Self {
         .init {
-            $0.count <= length ? .success($0) : .failure(error)
-        }
-    }
-
-/*    static func limit(_ maxLength: Int) -> Self {
-        .init {
-            if $0.count <= maxLength {
+            if $0.count <= length {
+                .success($0)
+            } else if let error {
+                .failure(error)
+            } else {
+                .success(String($0.prefix(length)))
             }
         }
-    }*/
+    }
 
     static func matches(_ string: String, error: Error) -> Self {
         .init {

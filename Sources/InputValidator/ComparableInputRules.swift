@@ -21,15 +21,17 @@ public extension AnyInputRule where Value: Comparable {
         }
     }
 
-    static func equal(_ value: Value, error: Error) -> Self {
+    static func range(_ range: ClosedRange<Value>, error: Error? = nil) -> Self {
         .init {
-            $0 == value ? .success($0) : .failure(error)
-        }
-    }
-
-    static func range(_ range: ClosedRange<Value>, error: Error) -> Self {
-        .init {
-            range.contains($0) ? .success($0) : .failure(error)
+            if range.contains($0) {
+                .success($0)
+            } else if let error {
+                .failure(error)
+            } else if $0 < range.lowerBound {
+                .success(range.lowerBound)
+            } else {
+                .success(range.upperBound)
+            }
         }
     }
 
@@ -40,12 +42,11 @@ public extension AnyInputRule where Value: Comparable {
     }
 }
 
-public extension InputRule {
+public extension AnyInputRule where Value: Equatable {
 
-    func rewrite() -> AnyInputRule {
+    static func equal(_ value: Value, error: Error) -> Self {
         .init {
-            callAsFunction($0)
+            $0 == value ? .success($0) : .failure(error)
         }
     }
 }
-
