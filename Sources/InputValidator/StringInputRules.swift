@@ -12,7 +12,7 @@ public extension AnyInputRule where Value == String {
     static func minimumLength(_ length: Int, error: Error) -> Self {
         .init {
             if $0.count >= length {
-                $0
+                return
             } else {
                 throw error
             }
@@ -22,11 +22,11 @@ public extension AnyInputRule where Value == String {
     static func maximumLength(_ length: Int, error: Error? = nil) -> Self {
         .init {
             if $0.count <= length {
-                $0
+                return
             } else if let error {
                 throw error
             } else {
-                String($0.prefix(length))
+                $0 = String($0.prefix(length))
             }
         }
     }
@@ -34,7 +34,7 @@ public extension AnyInputRule where Value == String {
     static func matches(_ string: String, error: Error) -> Self {
         .init {
             if $0 == string {
-                $0
+                return
             } else {
                 throw error
             }

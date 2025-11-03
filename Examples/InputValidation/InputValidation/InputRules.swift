@@ -22,28 +22,28 @@ extension InputRule where Self == AnyInputRule<String> {
             .minimumLength(8, error: ValidationError.password),
             AnyInputRule {
                 if $0.contains(/[A-Z]/) {
-                    $0
+                    return
                 } else {
                     throw ValidationError.password
                 }
             },
             AnyInputRule {
                 if $0.contains(/[a-z]/) {
-                    $0
+                    return
                 } else {
                     throw ValidationError.password
                 }
             },
             AnyInputRule {
                 if $0.contains(/\d/) {
-                    $0
+                    return
                 } else {
                     throw ValidationError.password
                 }
             },
             AnyInputRule {
                 if $0.contains(/[^a-zA-Z\d]/) {
-                    $0
+                    return
                 } else {
                     throw ValidationError.password
                 }

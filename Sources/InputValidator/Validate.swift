@@ -64,9 +64,11 @@ import SwiftUI
         validate(wrappedValue)
     }
 
-    func validate(_ newValue: Rule.Value) {
+    func validate(_ value: Rule.Value) {
+        var newValue = value
         do {
-            boxedValue.value = try rule(newValue)
+            try rule(&newValue)
+            boxedValue.value = newValue
             boxedValue.error = nil
         } catch {
             boxedValue.value = newValue

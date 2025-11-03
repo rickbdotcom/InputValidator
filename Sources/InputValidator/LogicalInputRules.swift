@@ -10,34 +10,31 @@ import Foundation
 public extension AnyInputRule {
 
     static func and(_ rules: [any InputRule<Value>]) -> Self {
-        .init { initialValue in
-            var value = initialValue
+        .init { value in
             for rule in rules {
-                value = try rule(value)
+                try rule(&value)
             }
-            return value
         }
     }
 
     static func or(_ rules: [any InputRule<Value>]) -> Self {
-        .init { initialValue in
-            var value = initialValue
+        .init { value in
             var anyError: Error?
             var success = false
             for rule in rules {
                 do {
-                    value = try rule(value)
+                    try rule(&value)
                     success = true
                 } catch {
                     anyError = error
                 }
             }
             if success {
-               return value
+               return
             } else if let anyError {
                 throw anyError
             } else {
-                return value
+                return
             }
         }
     }
@@ -52,12 +49,13 @@ public extension AnyInputRule {
 
     func not(error: Error) -> Self {
         .init {
-            let newValue = try? self($0)
-            if newValue == nil {
-                return $0
-            } else {
-                throw error
+            var newValue = $0
+            do {
+                try self(&newValue)
+            } catch {
+                return
             }
+            throw error
         }
     }
 }
