@@ -19,59 +19,67 @@ struct ContentView: View {
     @FocusState var focused: Field?
 
     var body: some View {
-        Form {
-            TextField(String(localized: .firstName), text: $firstName)
-                .validate(
-                    field: .firstName,
-                    validation: _firstName,
-                    focused: $focused
-                )
+        VStack {
+            Form {
+                TextField(String(localized: .firstName), text: $firstName)
+                    .validate(
+                        field: .firstName,
+                        validation: _firstName,
+                        focused: $focused
+                    )
 
-            TextField(String(localized: .lastName), text: $lastName)
-                .validate(
-                    field: .lastName,
-                    validation: _lastName,
-                    focused: $focused
-                )
+                TextField(String(localized: .lastName), text: $lastName)
+                    .validate(
+                        field: .lastName,
+                        validation: _lastName,
+                        focused: $focused
+                    )
 
-            SecureField(String(localized: .password), text: $password)
-                .validate(
-                    field: .password,
-                    validation: _password,
-                    focused: $focused
-                )
+                SecureField(String(localized: .password), text: $password)
+                    .validate(
+                        field: .password,
+                        validation: _password,
+                        focused: $focused
+                    )
 
-            SecureField(String(localized: .confirmPassword), text: $confirmPassword)
-                .validate(
-                    field: .confirmPassword,
-                    validation: _confirmPassword,
-                    focused: $focused
-                )
-                .match(
-                    .password,
-                    _password,
-                    .confirmPassword,
-                    _confirmPassword,
-                    error: ValidationError.confirmPassword,
-                    focused: _focused
-                )
+                SecureField(String(localized: .confirmPassword), text: $confirmPassword)
+                    .validate(
+                        field: .confirmPassword,
+                        validation: _confirmPassword,
+                        focused: $focused
+                    )
+                    .match(
+                        .password,
+                        _password,
+                        .confirmPassword,
+                        _confirmPassword,
+                        error: ValidationError.confirmPassword,
+                        focused: _focused
+                    )
 
-            TextField(String(localized: .creditCard), text: $creditCard)
-                .creditCard(creditCard)
-                .validate(
-                    field: .creditCard,
-                    validation: _creditCard,
-                    focused: $focused
-                )
-                .keyboardType(.numberPad)
+                TextField(String(localized: .creditCard), text: $creditCard)
+                    .creditCard(creditCard)
+                    .validate(
+                        field: .creditCard,
+                        validation: _creditCard,
+                        focused: $focused
+                    )
+                    .keyboardType(.numberPad)
 
-            TextField(String(localized: .expirationDate), text: $expirationDate)
-                .validate(
-                    field: .expirationDate,
-                    validation: _expirationDate,
-                    focused: $focused
-                )
-                .keyboardType(.numberPad)
+                TextField(String(localized: .expirationDate), text: $expirationDate)
+                    .validate(
+                        field: .expirationDate,
+                        validation: _expirationDate,
+                        focused: $focused
+                    )
+                    .keyboardType(.numberPad)
+            }
+
+            Button(String(localized: .submit)) {
+            }
+            .disabled(
+                _firstName, _lastName, _password, _confirmPassword, _creditCard, _expirationDate
+            )
         }
         .padding()
     }

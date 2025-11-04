@@ -63,6 +63,15 @@ import SwiftUI
     public func validate() {
         validate(wrappedValue)
     }
+    public func isValid() -> Bool {
+        var newValue = wrappedValue
+        do {
+            try rule(&newValue)
+            return true
+        } catch {
+            return false
+        }
+    }
 
     func validate(_ value: Rule.Value) {
         var newValue = value
@@ -88,5 +97,19 @@ import SwiftUI
             self.value = value
             self.rule = rule
         }
+    }
+}
+
+public extension View {
+    func disabled<each Rule: InputRule>(_ validations: repeat Validate<each Rule>) -> some View {
+        var disabled = false
+        for validation in repeat each validations {
+            if validation.isValid() == false {
+                disabled = true
+                break
+            }
+        }
+        return self
+            .disabled(disabled)
     }
 }
