@@ -34,14 +34,14 @@ struct ContentView: View {
                     focused: $focused
                 )
 
-            TextField(String(localized: .password), text: $password)
+            SecureField(String(localized: .password), text: $password)
                 .validate(
                     field: .password,
                     validation: _password,
                     focused: $focused
                 )
 
-            TextField(String(localized: .confirmPassword), text: $confirmPassword)
+            SecureField(String(localized: .confirmPassword), text: $confirmPassword)
                 .validate(
                     field: .confirmPassword,
                     validation: _confirmPassword,
