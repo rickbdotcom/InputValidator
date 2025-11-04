@@ -8,12 +8,12 @@
 import Foundation
 
 public protocol InputRule<Value> {
-    associatedtype Value
+    associatedtype Value: Equatable
 
     func callAsFunction(_ value: inout Value) throws
 }
 
-public struct AnyInputRule<Value>: InputRule {
+public struct AnyInputRule<Value: Equatable>: InputRule {
     let validate: (inout Value) throws -> Void
 
     public init(_ validate: @escaping (inout Value) throws -> Void) {

@@ -1,0 +1,15 @@
+{
+  "originHash" : "9846ea736e3e3b695f917b164a173f8ee832394a087e1025a3ade2572b582d98",
+  "pins" : [
+    {
+      "identity" : "creditcardformatter",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/barbarity/CreditCardFormatter",
+      "state" : {
+        "revision" : "918bada935459b3543891495b4d3fbd78ba77bc7",
+        "version" : "0.1.0"
+      }
+    }
+  ],
+  "version" : 3
+}

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		675B92642EB2CF4800970D84 /* InputValidator in Frameworks */ = {isa = PBXBuildFile; productRef = 675B92632EB2CF4800970D84 /* InputValidator */; };
+		67BBB7A02EB96DA2004EE28B /* CreditCardFormatter in Frameworks */ = {isa = PBXBuildFile; productRef = 67BBB79F2EB96DA2004EE28B /* CreditCardFormatter */; };
 		67C2D6F92EB53255004DCD6E /* InputValidator in Frameworks */ = {isa = PBXBuildFile; productRef = 67C2D6F82EB53255004DCD6E /* InputValidator */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +31,7 @@
 			files = (
 				67C2D6F92EB53255004DCD6E /* InputValidator in Frameworks */,
 				675B92642EB2CF4800970D84 /* InputValidator in Frameworks */,
+				67BBB7A02EB96DA2004EE28B /* CreditCardFormatter in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +76,7 @@
 			packageProductDependencies = (
 				675B92632EB2CF4800970D84 /* InputValidator */,
 				67C2D6F82EB53255004DCD6E /* InputValidator */,
+				67BBB79F2EB96DA2004EE28B /* CreditCardFormatter */,
 			);
 			productName = InputValidation;
 			productReference = 675B92542EB2CF2100970D84 /* InputValidation.app */;
@@ -105,6 +108,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				67C2D6F72EB53255004DCD6E /* XCLocalSwiftPackageReference "../../../InputValidator" */,
+				67BBB79E2EB96DA2004EE28B /* XCRemoteSwiftPackageReference "CreditCardFormatter" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 675B92552EB2CF2100970D84 /* Products */;
@@ -344,10 +348,26 @@
 		};
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		67BBB79E2EB96DA2004EE28B /* XCRemoteSwiftPackageReference "CreditCardFormatter" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/barbarity/CreditCardFormatter";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		675B92632EB2CF4800970D84 /* InputValidator */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = InputValidator;
+		};
+		67BBB79F2EB96DA2004EE28B /* CreditCardFormatter */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 67BBB79E2EB96DA2004EE28B /* XCRemoteSwiftPackageReference "CreditCardFormatter" */;
+			productName = CreditCardFormatter;
 		};
 		67C2D6F82EB53255004DCD6E /* InputValidator */ = {
 			isa = XCSwiftPackageProductDependency;

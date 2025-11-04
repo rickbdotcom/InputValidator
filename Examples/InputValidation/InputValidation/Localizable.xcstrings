@@ -36,6 +36,17 @@
         }
       }
     },
+    "creditCard" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Credit Card"
+          }
+        }
+      }
+    },
     "creditCardError" : {
       "extractionState" : "manual",
       "localizations" : {

@@ -29,5 +29,6 @@ extension LocalizedStringResource {
     static let expirationDate: LocalizedStringResource = "expirationDate"
     static let expirationDateRequired: LocalizedStringResource = "expirationDateRequired"
     static let expired: LocalizedStringResource = "expired"
+    static let creditCard: LocalizedStringResource = "creditCard"
 }
 #endif

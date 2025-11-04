@@ -13,48 +13,65 @@ struct ContentView: View {
     @Validate(.name(.lastName)) var lastName = ""
     @Validate(.password) var password = ""
     @Validate(.confirmPassword) var confirmPassword = ""
+    @Validate(.creditCard) var creditCard = ""
     @Validate(.expirationDate) var expirationDate = ""
 
     @FocusState var focused: Field?
 
     var body: some View {
         Form {
-            FormTextField(
-                title: .firstName,
-                field: .firstName,
-                validation: _firstName,
-                focused: _focused
-            )
+            TextField(String(localized: .firstName), text: $firstName)
+                .validate(
+                    field: .firstName,
+                    validation: _firstName,
+                    focused: $focused
+                )
 
-            FormTextField(
-                title: .lastName,
-                field: .lastName,
-                validation: _lastName,
-                focused: _focused
-            )
+            TextField(String(localized: .lastName), text: $lastName)
+                .validate(
+                    field: .lastName,
+                    validation: _lastName,
+                    focused: $focused
+                )
 
-            FormTextField(
-                title: .password,
-                secureField: .password,
-                validation: _password,
-                focused: _focused
-            )
+            TextField(String(localized: .password), text: $password)
+                .validate(
+                    field: .password,
+                    validation: _password,
+                    focused: $focused
+                )
 
-            FormTextField(
-                title: .confirmPassword,
-                secureField: .confirmPassword,
-                validation: _confirmPassword,
-                focused: _focused
-            )
-            .match(.password, _password, .confirmPassword, _confirmPassword, error: ValidationError.confirmPassword, focused: _focused)
+            TextField(String(localized: .confirmPassword), text: $confirmPassword)
+                .validate(
+                    field: .confirmPassword,
+                    validation: _confirmPassword,
+                    focused: $focused
+                )
+                .match(
+                    .password,
+                    _password,
+                    .confirmPassword,
+                    _confirmPassword,
+                    error: ValidationError.confirmPassword,
+                    focused: _focused
+                )
 
-            FormTextField(
-                title: .expirationDate,
-                field: .expirationDate,
-                validation: _expirationDate,
-                focused: _focused
-            )
-            .keyboardType(.numberPad)
+            TextField(String(localized: .creditCard), text: $creditCard)
+                .creditCard(creditCard)
+                .validate(
+                    field: .creditCard,
+                    validation: _creditCard,
+                    focused: $focused
+                )
+                .keyboardType(.numberPad)
+
+            TextField(String(localized: .expirationDate), text: $expirationDate)
+                .validate(
+                    field: .expirationDate,
+                    validation: _expirationDate,
+                    focused: $focused
+                )
+                .keyboardType(.numberPad)
         }
         .padding()
     }

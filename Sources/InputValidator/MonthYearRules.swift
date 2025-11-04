@@ -55,9 +55,9 @@ private extension DateComponents {
     var mmyy: String {
         if let month {
             if let year {
-                "\(month)/\(String(year).suffix(2))"
+                String(format: "%02d/%@", month, String(year - 2000))
             } else {
-                "\(month)"
+                String(format: "%02d", month)
             }
         } else {
             ""

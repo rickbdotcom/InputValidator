@@ -75,6 +75,10 @@ extension InputRule where Self == AnyInputRule<String> {
             }
         ])
     }
+
+    static var creditCard: AnyInputRule<String> {
+        CreditCardFormatRule(error: ValidationError.creditCard).any()
+    }
 }
 
 enum ValidationError: LocalizedError {
@@ -84,6 +88,7 @@ enum ValidationError: LocalizedError {
     case confirmPassword
     case invalidDate
     case expired
+    case creditCard
 
     var errorDescription: String? {
         switch self {
@@ -99,6 +104,8 @@ enum ValidationError: LocalizedError {
             String(localized: .expirationDateRequired)
         case .expired:
             String(localized: .expired)
+        case .creditCard:
+            String(localized: .creditCardError)
         }
     }
 }
