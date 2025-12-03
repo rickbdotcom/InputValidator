@@ -7,9 +7,9 @@
 
 import Foundation
 
-public extension AnyInputRule where Value == String {
+public extension InputRule where Value == String {
 
-    static func minimumLength(_ length: Int, error: Error) -> Self {
+    static func minimumLength(_ length: Int, error: Error) -> AnyInputRule<Value> {
         .init {
             if $0.count >= length {
                 return
@@ -19,7 +19,7 @@ public extension AnyInputRule where Value == String {
         }
     }
 
-    static func maximumLength(_ length: Int, error: Error? = nil) -> Self {
+    static func maximumLength(_ length: Int, error: Error? = nil) -> AnyInputRule<Value> {
         .init {
             if $0.count <= length {
                 return
@@ -31,13 +31,30 @@ public extension AnyInputRule where Value == String {
         }
     }
 
-    static func matches(_ string: String, error: Error) -> Self {
+    static func matches(_ string: String, error: Error) -> AnyInputRule<Value> {
         .init {
             if $0 == string {
                 return
             } else {
                 throw error
             }
+        }
+    }
+
+    static func filter(_ filter: @escaping (Character) -> Bool) -> AnyInputRule<Value> {
+        .init { value in
+            value = String(value.filter(filter))
+        }
+    }
+
+    // smart punctuation is the worst
+    static func removeSmartPunctuation() -> AnyInputRule<Value> {
+        .init { value in
+            value = value
+                .replacingOccurrences(of: "\u{2026}", with: "...")
+                .replacingOccurrences(of: "\u{2014}", with: "--")
+                .replacingOccurrences(of: "\u{2018}", with: "'")
+                .replacingOccurrences(of: "\u{2019}", with: "'")
         }
     }
 }

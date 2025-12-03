@@ -7,9 +7,9 @@
 
 import Foundation
 
-public extension AnyInputRule {
+public extension InputRule {
 
-    static func and(_ rules: [any InputRule<Value>]) -> Self {
+    static func and(_ rules: [any InputRule<Value>]) -> AnyInputRule<Value> {
         .init { value in
             for rule in rules {
                 try rule(&value)
@@ -17,7 +17,7 @@ public extension AnyInputRule {
         }
     }
 
-    static func or(_ rules: [any InputRule<Value>]) -> Self {
+    static func or(_ rules: [any InputRule<Value>]) -> AnyInputRule<Value> {
         .init { value in
             var anyError: Error?
             var success = false
@@ -39,15 +39,15 @@ public extension AnyInputRule {
         }
     }
 
-    func and<Rule: InputRule<Value>>(_ rule: Rule) -> Self {
+    func and<Rule: InputRule<Value>>(_ rule: Rule) -> AnyInputRule<Value> {
         Self.and([self, rule])
     }
 
-    func or<Rule: InputRule<Value>>(_ rule: Rule) -> some InputRule<Value> {
+    func or<Rule: InputRule<Value>>(_ rule: Rule) -> AnyInputRule<Value> {
         Self.or([self, rule])
     }
 
-    func not(error: Error) -> Self {
+    func not(error: Error) -> AnyInputRule<Value> {
         .init {
             var newValue = $0
             do {

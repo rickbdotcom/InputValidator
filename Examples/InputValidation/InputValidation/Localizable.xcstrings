@@ -1,19 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "%@ must be less than %lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ must be less than %2$lld"
-          }
-        }
-      }
-    },
-    "%@ must not be empty" : {
-
-    },
     "confirmPassword" : {
       "extractionState" : "manual",
       "localizations" : {

@@ -32,4 +32,9 @@ public extension InputRule {
             try self(&$0)
         }
     }
+
+    static var none: AnyInputRule<Value> {
+        .init { _ in
+        }
+    }
 }

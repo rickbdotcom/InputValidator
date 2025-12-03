@@ -7,9 +7,9 @@
 
 import Foundation
 
-public extension AnyInputRule where Value == String {
+public extension InputRule where Value == String {
 
-    static func monthYear() -> Self {
+    static func monthYear() -> AnyInputRule<Value> {
         .init { value in
             let digits = Array(value).compactMap {
                 Int(String($0))
@@ -43,7 +43,7 @@ public extension AnyInputRule where Value == String {
         }
     }
 
-    static func monthYear(validate: @escaping (DateComponents?) throws -> DateComponents?) -> Self {
+    static func monthYear(validate: @escaping (DateComponents?) throws -> DateComponents?) -> AnyInputRule<Value> {
         .init {
             $0 = try validate($0.monthYear)?.mmyy ?? ""
         }
