@@ -57,4 +57,14 @@ public extension InputRule where Value == String {
                 .replacingOccurrences(of: "\u{2019}", with: "'")
         }
     }
+
+    static func removeDiacritics(locale: Locale = .current) -> AnyInputRule<Value> {
+        folding(options: .diacriticInsensitive, locale: locale)
+    }
+    
+    static func folding(options: String.CompareOptions = [], locale: Locale = .current) -> AnyInputRule<Value> {
+        .init { value in
+            value = value.folding(options: options, locale: locale)
+        }
+    }
 }

@@ -100,3 +100,17 @@ import SwiftUI
         }
     }
 }
+
+public extension View {
+    func disabled<each Rule: InputRule>(_ validations: repeat Validate<each Rule>) -> some View {
+        var disabled = false
+        for validation in repeat each validations {
+            if validation.isValid == false {
+                disabled = true
+                break
+            }
+        }
+        return self
+            .disabled(disabled)
+    }
+}
