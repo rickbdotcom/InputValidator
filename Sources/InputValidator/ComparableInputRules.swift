@@ -66,3 +66,16 @@ public extension AnyInputRule where Value: Equatable {
         }
     }
 }
+
+public extension AnyInputRule where Value == String {
+
+    static func equal(_ value: Value, options: String.CompareOptions, error: Error) -> Self {
+        .init {
+            if $0.compare(value, options: options) == .orderedSame {
+                return
+            } else {
+                throw error
+            }
+        }
+    }
+}
