@@ -9,7 +9,22 @@ import Foundation
 import SwiftUI
 
 @MainActor
-@propertyWrapper public struct Validate<Rule: InputRule>: DynamicProperty {
+public protocol InputValidator {
+    var error: Error? { get nonmutating set}
+    var displayError: Bool { get nonmutating set}
+    var isValid: Bool { get }
+    
+    func validate()
+}
+
+public extension InputValidator {
+    var errorToDisplay: Error? {
+        (error != nil && displayError) ? error : nil
+    }
+}
+
+@MainActor
+@propertyWrapper public struct Validate<Rule: InputRule>: InputValidator, DynamicProperty {
 
     public init(wrappedValue: Rule.Value, _ rule: Rule) {
         self._boxedValue = StateObject(wrappedValue: BoxedValue(value: wrappedValue, rule: rule))
@@ -33,9 +48,6 @@ import SwiftUI
         })
     }
 
-    public var errorToDisplay: Error? {
-        (error != nil && displayError) ? error : nil
-    }
 
     public var error: Error? {
         get {
@@ -116,5 +128,11 @@ public extension View {
         }
         return self
             .disabled(disabled)
+    }
+}
+
+public func ForEachValidation<each Rule: InputRule>(_ validations: repeat Validate<each Rule>, perform: (InputValidator) -> Void) {
+    for validation in repeat each validations {
+        perform(validation)
     }
 }
