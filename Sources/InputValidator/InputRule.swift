@@ -38,3 +38,11 @@ public extension InputRule {
         }
     }
 }
+
+public extension InputRule where Self == AnyInputRule<String> {
+
+    static var none: AnyInputRule<Value> {
+        .init { _ in
+        }
+    }
+}
