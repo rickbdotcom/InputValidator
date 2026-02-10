@@ -33,6 +33,10 @@ import SwiftUI
         })
     }
 
+    public var errorToDisplay: Error? {
+        (error != nil && displayError) ? error : nil
+    }
+
     public var error: Error? {
         get {
             boxedValue.displayError ? boxedValue.error : nil
