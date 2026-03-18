@@ -24,13 +24,15 @@ public extension InputValidator {
 }
 
 @MainActor
-@propertyWrapper public struct Validate<Rule: InputRule>: InputValidator, DynamicProperty {
+@propertyWrapper public struct Validate<Value>: InputValidator, DynamicProperty {
 
-    public init(wrappedValue: Rule.Value, _ rule: Rule) {
-        self._boxedValue = StateObject(wrappedValue: BoxedValue(value: wrappedValue, rule: rule))
+    public typealias Rule = (inout Value) throws -> Void
+
+    public init<T: InputRule>(wrappedValue: Value, _ rule: T) where T.Value == Value {
+        self._boxedValue = StateObject(wrappedValue: BoxedValue(value: wrappedValue, rule: rule.callAsFunction))
     }
 
-    public var wrappedValue: Rule.Value {
+    public var wrappedValue: Value {
         get {
             boxedValue.value
         }
@@ -40,14 +42,13 @@ public extension InputValidator {
         }
     }
 
-    public var projectedValue: Binding<Rule.Value> {
+    public var projectedValue: Binding<Value> {
         .init(get: {
             wrappedValue
         }, set: {
             wrappedValue = $0
         })
     }
-
 
     public var error: Error? {
         get {
@@ -64,6 +65,12 @@ public extension InputValidator {
         }
         nonmutating set {
             boxedValue.displayError = newValue
+        }
+    }
+
+    public nonmutating func set<T: InputRule>(rule: T) where T.Value == Value {
+        self.rule = {
+            try rule(&$0)
         }
     }
 
@@ -90,7 +97,7 @@ public extension InputValidator {
         }
     }
 
-    func validate(_ value: Rule.Value) {
+    func validate(_ value: Value) {
         var newValue = value
         do {
             try rule(&newValue)
@@ -105,12 +112,12 @@ public extension InputValidator {
     @StateObject private var boxedValue: BoxedValue
 
     class BoxedValue: ObservableObject {
-        @Published var value: Rule.Value
+        @Published var value: Value
         @Published var error: Error?
         @Published var displayError: Bool = false
         @Published var rule: Rule
 
-        init(value: Rule.Value, rule: Rule) {
+        init(value: Value, rule: @escaping Rule) {
             self.value = value
             self.rule = rule
         }
@@ -118,7 +125,7 @@ public extension InputValidator {
 }
 
 public extension View {
-    func disabled<each Rule: InputRule>(_ validations: repeat Validate<each Rule>) -> some View {
+    func disabled<each Value>(_ validations: repeat Validate<each Value>) -> some View {
         var disabled = false
         for validation in repeat each validations {
             if validation.isValid == false {
@@ -131,7 +138,7 @@ public extension View {
     }
 }
 
-public func ForEachValidation<each Rule: InputRule>(_ validations: repeat Validate<each Rule>, perform: (InputValidator) -> Void) {
+public func ForEachValidation<each Value>(_ validations: repeat Validate<each Value>, perform: (InputValidator) -> Void) {
     for validation in repeat each validations {
         perform(validation)
     }
