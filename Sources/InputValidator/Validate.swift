@@ -32,6 +32,10 @@ public extension InputValidator {
         self._boxedValue = StateObject(wrappedValue: BoxedValue(value: wrappedValue, rule: rule.callAsFunction))
     }
 
+    public init(wrappedValue: Value) {
+        self._boxedValue = StateObject(wrappedValue: BoxedValue(value: wrappedValue, rule:  { _ in }))
+    }
+
     public var wrappedValue: Value {
         get {
             boxedValue.value
